@@ -1,7 +1,7 @@
 
 # files that are copyright Xlilinx
 bbfifo_16x8.vhd
-kcuartx.vhd
+kcuart_tx.vhd
 uart_tx.vhd
 
 # usual suspects
