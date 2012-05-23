@@ -59,16 +59,16 @@ megabyte of random bytes.
 
 Will display something like:
 
-> 0000000 ed 6a 5a 81 b7 13 6b 8c 4b c7 b4 ad 1d 84 13 4b
-> 0000020 88 a7 f9 7a 20 79 e1 df 98 80 42 dc 6a 05 6b 4e
-> 0000040 a5 95 94 00 8d 6e ce 06 84 6b ef a0 4b 9c a0 d4
-> 0000060 de 84 64 e5 23 59 59 6c 3d 3b 59 73 cf 42 8f e8
-> 0000100 01 38 43 45 a4 e2 0b 3a cf f7 4c 8b 01 61 ec 24
-> 0000120 cf 8f cf 11 24 39 2e 50 1b ad 60 7a 05 ce 6a eb
-> 0000140 cb 24 28 95 25 7a ad 73 c5 89 b7 33 b4 99 79 41
-> 0000160 f7 90 bc 8c f5 5a f5 8f 11 50 ad 1c 96 43 19 54
-> 0000200 85 c2 30 ae ae 8f f4 34 22 bc 01 1a 74 30 02 99
-> 0000220 12 ee 1b d4 8e 8d 04 b7 4a 70 a4 19 ae a7 33 65
+    0000000 ed 6a 5a 81 b7 13 6b 8c 4b c7 b4 ad 1d 84 13 4b
+    0000020 88 a7 f9 7a 20 79 e1 df 98 80 42 dc 6a 05 6b 4e
+    0000040 a5 95 94 00 8d 6e ce 06 84 6b ef a0 4b 9c a0 d4
+    0000060 de 84 64 e5 23 59 59 6c 3d 3b 59 73 cf 42 8f e8
+    0000100 01 38 43 45 a4 e2 0b 3a cf f7 4c 8b 01 61 ec 24
+    0000120 cf 8f cf 11 24 39 2e 50 1b ad 60 7a 05 ce 6a eb
+    0000140 cb 24 28 95 25 7a ad 73 c5 89 b7 33 b4 99 79 41
+    0000160 f7 90 bc 8c f5 5a f5 8f 11 50 ad 1c 96 43 19 54
+    0000200 85 c2 30 ae ae 8f f4 34 22 bc 01 1a 74 30 02 99
+    0000220 12 ee 1b d4 8e 8d 04 b7 4a 70 a4 19 ae a7 33 65
 
 ### Dieharder tests
 
@@ -122,8 +122,9 @@ bits of entropy.
 
 ## Future work
 
-* Do a few more entropy tests
-* Add more info on the inner-workings
+* Do a few more entropy tests (NIST, FIPS, etc.)
+* Fix it so there is only fresh data in the uart fifo
+* Add more documentation on the inner-workings
 * Test and tweak the output rate for optimal performance
 * Add a pre-made bitfile for really impatient users
 * Integrate the rng into the
