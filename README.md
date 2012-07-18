@@ -7,8 +7,8 @@ A hardware random number generator (RNG) for the
 ## About
 
 The Whirlyfly project generates random bytes and sends them over the
-Papilio's build in serial port.  To generate the bits, the Whirilygig
-module is used.  Whirlygig consists of a series of
+Papilio's built-in serial port.  To generate the bits, the Whirilygig
+module is used.  Whirlygig uses a series of
 [unlocked inverter chains](http://en.wikipedia.org/wiki/Ring_oscillator)
 to generate truly random bits.  These bits are then sent over the
 Papilio's serial port to a host computer.  The bits can then be used
@@ -27,14 +27,14 @@ used, based on, or referenced by the project.
 ## Quickstart
 
 The uart side of this project is largly based on Jack Gasset's uart
-tutorials for the Papilio One.  I would recommend starting there to
-get an idea of the process: 
+tutorials for the Papilio One.  I would recommend starting there if
+you are unfamiliar with the process:
 [HighSpeedUart Tutorial](http://papilio.cc/index.php?n=Papilio.HighSpeedUART).
 
 ### Building the project
 
-You will need to follow the steps mentioned and add the following Xilinx
-uart code files to the to the project:
+You will need to follow the steps mentioned in Jack's tutorial and add
+the following Xilinx uart code files to the to the project:
 
 * bbfifo_16x8.vhd
 * kcuart_tx.vhd
@@ -101,6 +101,8 @@ board. For the Papilio, it was easiest to just use the on-board USB to
 serial adapter.  The Uart core is provided by Xilinx, and runs default
 at 3M baud.
 
+![Overview diagram](https://github.com/zdavkeos/whirlyfly/blob/master/doc/whirlyfly_overview.png)
+
 The original Whirlygig core had to be modified slightly in order to
 compile with the latest Xilinx ISE (tested with 14.1).  In addition to
 the `KEEP` attribute applied to the inverters, the `SAVE` attribute
@@ -119,6 +121,8 @@ suite.  The Papilio passed all tests, just as the original Whirlygig.
 
 Running an entropy calculator on one 5MB sample yielded 7.988
 bits of entropy.
+
+![Papillio hard at work](https://github.com/zdavkeos/whirlyfly/blob/master/doc/papillio_hard_at_work.png)
 
 ## Future work
 
