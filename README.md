@@ -48,20 +48,21 @@ uart tutorial.
 Once the bitstream is generated, load it on the Papilio in the usual
 fashion (linux): `papilio-loader -f whirlyfly.bit`
 
-### Collecting data
+## Collecting data
 
 You _could_ use a program like minicom or
 [GtkTerm](https://fedorahosted.org/gtkterm/) to open the port and read
 data, but it isn't going to be pretty.  What we really want is to set
-the default serial port setting so we can read the data with standard
-tools (head, dd, cat, etc.)  If we don't set the default, the system
-default will be used (115200 usually).  If the baud rates aren't
-matched, out random data won't be as random.  It will appear to work
-correctly in this case, but if you test the data it won't be as random
-as it should be.
+the default serial port settings so we can read the data with standard
+tools (`head`, `dd`, `cat`, etc.)  If we don't set the default, the
+system default will be used (115200 usually).  If the baud rates
+aren't matched, out random data won't be as random as it should be.
+It will _appear_ to work correctly in this case, but if you test the
+data it won't be quite right (the FIPS tests do really poorly).
 
-To set the default serial port setting in Linux, use the `setserial`
-command.  It can be used like so:
+To set the default settings for a serial port in Linux, use the
+[`stty`](http://unixhelp.ed.ac.uk/CGI/man-cgi?stty) command.  It works
+like so:
 
 `stty --file=/dev/ttyUSB1 speed 3000000`
 
