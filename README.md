@@ -50,7 +50,22 @@ fashion (linux): `papilio-loader -f whirlyfly.bit`
 
 ### Collecting data
 
-Once the bitfile is loaded, start collecting some random bits!
+You _could_ use a program like minicom or
+[GtkTerm](https://fedorahosted.org/gtkterm/) to open the port and read
+data, but it isn't going to be pretty.  What we really want is to set
+the default serial port setting so we can read the data with standard
+tools (head, dd, cat, etc.)  If we don't set the default, the system
+default will be used (115200 usually).  If the baud rates aren't
+matched, out random data won't be as random.  It will appear to work
+correctly in this case, but if you test the data it won't be as random
+as it should be.
+
+To set the default serial port setting in Linux, use the `setserial`
+command.  It can be used like so:
+
+`stty --file=/dev/ttyUSB1 speed 3000000`
+
+Once everything is setup, start collecting those bits!
 
 `dd bs=1K count=1000 if=/dev/ttyUSB1 of=random_bits.bin`
 
@@ -92,6 +107,13 @@ non-standard source.  With Whirlyfly generating the bits and
 `rng-tools` feeding the entropy pool, applications that use the
 standard Linux interfaces can take advantage of high quality
 randomness without changing a line of code.
+
+To see if things are working, you can run `rngd` in the foreground like so:
+
+`rngd -f -r /dev/ttyUSB1`
+
+A few of the fips tests might fail (especially at first) but things
+should settle out and start working quickly.
 
 ## Papilio One
 
@@ -137,3 +159,4 @@ bits of entropy.
     [Zpuino](http://www.alvie.com/zpuino/index.html) core as a
     hardware extension
 * Play with the RNG core, test other inverter configurations, etc.
+* Do some Monte-Carlo simulations
