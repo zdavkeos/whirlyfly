@@ -1,0 +1,206 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Whirlyfly by zdavkeos</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Whirlyfly</h1>
+        <p>Hardware RNG for Papilio One based on the original Whirlygig</p>
+
+        <p class="view"><a href="https://github.com/zdavkeos/whirlyfly">View the Project on GitHub <small>zdavkeos/whirlyfly</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/zdavkeos/whirlyfly/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/zdavkeos/whirlyfly/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/zdavkeos/whirlyfly">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>Whirlyfly</h1>
+
+<p>A hardware random number generator (RNG) for the
+<a href="www.papilio.cc">Papilio One</a> board based on the
+<a href="http://warmcat.com/_wp/whirlygig-rng/">Whirlygig</a>.</p>
+
+<p><img src="https://github.com/zdavkeos/whirlyfly/blob/master/doc/gtkterm_sample.png" alt="GtkTerm does not like chaos"></p>
+
+<h2>About</h2>
+
+<p>The Whirlyfly project generates random bytes and sends them over the
+Papilio's built-in serial port.  To generate the bits, the Whirilygig
+module is used.  Whirlygig uses a series of
+<a href="http://en.wikipedia.org/wiki/Ring_oscillator">unlocked inverter chains</a>
+to generate truly random bits.  These bits are then sent over the
+Papilio's serial port to a host computer.  The bits can then be used
+in a number of different applications.</p>
+
+<h2>License</h2>
+
+<p>This code for this project comes from a variety of sources.  The code
+added by me is under the GPL.  The following lists the code that is
+used, based on, or referenced by the project.</p>
+
+<ul>
+<li>Whirlygig core: Andy Green @ Crash Barrier Ltd</li>
+<li>Uart driver: Jack Gasset @ Gadget Factory</li>
+<li>Uart core (not included, but referenced): (C) Xilinx Inc.</li>
+</ul><h2>Quickstart</h2>
+
+<p>The uart side of this project is largly based on Jack Gasset's uart
+tutorials for the Papilio One.  I would recommend starting there if
+you are unfamiliar with the process:
+<a href="http://papilio.cc/index.php?n=Papilio.HighSpeedUART">HighSpeedUart Tutorial</a>.</p>
+
+<h3>Building the project</h3>
+
+<p>You will need to follow the steps mentioned in Jack's tutorial and add
+the following Xilinx uart code files to the to the project:</p>
+
+<ul>
+<li>bbfifo_16x8.vhd</li>
+<li>kcuart_tx.vhd</li>
+<li>uart_tx.vhd</li>
+</ul><p>After getting all the code in place, generate the bitstream as in the
+uart tutorial.</p>
+
+<p>Once the bitstream is generated, load it on the Papilio in the usual
+fashion (linux): <code>papilio-loader -f whirlyfly.bit</code></p>
+
+<h2>Collecting data</h2>
+
+<p>You <em>could</em> use a program like minicom or
+<a href="https://fedorahosted.org/gtkterm/">GtkTerm</a> to open the port and read
+data, but it isn't going to be pretty.  What we really want is to set
+the default serial port settings so we can read the data with standard
+tools (<code>head</code>, <code>dd</code>, <code>cat</code>, etc.)  If we don't set the default, the
+system default will be used (115200 usually).  If the baud rates
+aren't matched, out random data won't be as random as it should be.
+It will <em>appear</em> to work correctly in this case, but if you test the
+data it won't be quite right (the FIPS tests do really poorly).</p>
+
+<p>To set the default settings for a serial port in Linux, use the
+<a href="http://unixhelp.ed.ac.uk/CGI/man-cgi?stty"><code>stty</code></a> command.  It works
+like so:</p>
+
+<p><code>stty --file=/dev/ttyUSB1 speed 3000000</code></p>
+
+<p>Once everything is setup, start collecting those bits!</p>
+
+<p><code>dd bs=1K count=1000 if=/dev/ttyUSB1 of=random_bits.bin</code></p>
+
+<p>This will create a file called <code>random_bits.bin</code> that contains 1
+megabyte of random bytes.</p>
+
+<p><code>od -t x1 random_bits.bin | head</code></p>
+
+<p>Will display something like:</p>
+
+<pre><code>0000000 ed 6a 5a 81 b7 13 6b 8c 4b c7 b4 ad 1d 84 13 4b
+0000020 88 a7 f9 7a 20 79 e1 df 98 80 42 dc 6a 05 6b 4e
+0000040 a5 95 94 00 8d 6e ce 06 84 6b ef a0 4b 9c a0 d4
+0000060 de 84 64 e5 23 59 59 6c 3d 3b 59 73 cf 42 8f e8
+0000100 01 38 43 45 a4 e2 0b 3a cf f7 4c 8b 01 61 ec 24
+0000120 cf 8f cf 11 24 39 2e 50 1b ad 60 7a 05 ce 6a eb
+0000140 cb 24 28 95 25 7a ad 73 c5 89 b7 33 b4 99 79 41
+0000160 f7 90 bc 8c f5 5a f5 8f 11 50 ad 1c 96 43 19 54
+0000200 85 c2 30 ae ae 8f f4 34 22 bc 01 1a 74 30 02 99
+0000220 12 ee 1b d4 8e 8d 04 b7 4a 70 a4 19 ae a7 33 65
+</code></pre>
+
+<h3>Dieharder tests</h3>
+
+<p>If you have Dieharder installed, you can test to see how random the
+file is (though you really do need more bytes the 1M):</p>
+
+<p><code>dieharder -a -f random_bits.bin</code></p>
+
+<p>Or just run Dieharder against the Papilio stream directly:</p>
+
+<p><code>dieharder -a -f /dev/ttyUSB1</code></p>
+
+<h3>Feeding the Linux entropy pool</h3>
+
+<p>The
+<a href="http://sourceforge.net/projects/gkernel/files/rng-tools/"><code>rng-tools</code> package</a>
+for Linux provides the ability to feed the entropy pool from a
+non-standard source.  With Whirlyfly generating the bits and
+<code>rng-tools</code> feeding the entropy pool, applications that use the
+standard Linux interfaces can take advantage of high quality
+randomness without changing a line of code.</p>
+
+<p>To see if things are working, you can run <code>rngd</code> in the foreground like so:</p>
+
+<p><code>rngd -f -r /dev/ttyUSB1</code></p>
+
+<p>A few of the fips tests might fail (especially at first) but things
+should settle out and start working quickly.</p>
+
+<h2>Papilio One</h2>
+
+<p>The original Whirlygig ran on a Xilinx CPLD and output its data in
+parallel using 8 I/O pins. Those pins were then periodically read by a
+USB enabled microcontroller which then sent them to the host computer.
+This project adapts the Whirlygig code to run on a Papilio One
+board. For the Papilio, it was easiest to just use the on-board USB to
+serial adapter.  The Uart core is provided by Xilinx, and runs default
+at 3M baud.</p>
+
+<p><img src="https://github.com/zdavkeos/whirlyfly/blob/master/doc/whirlyfly_overview.png" alt="Overview diagram"></p>
+
+<p>The original Whirlygig core had to be modified slightly in order to
+compile with the latest Xilinx ISE (tested with 14.1).  In addition to
+the <code>KEEP</code> attribute applied to the inverters, the <code>SAVE</code> attribute
+had to be applied as well.  I'm not sure if this is because of the
+newer IDE or because of a different target device.</p>
+
+<p>For more information on the Whirlygig core, see the
+<a href="http://warmcat.com/_wp/whirlygig-rng/">Whilygig site</a>.</p>
+
+<h2>Testing and Results</h2>
+
+<p>The code has been tested on a Papilio One 500K outputting samples at
+3M baud.  The output was ran against the
+<a href="http://www.phy.duke.edu/%7Ergb/General/dieharder.php">Dieharder</a> test
+suite.  The Papilio passed all tests, just as the original Whirlygig.</p>
+
+<p>Running an entropy calculator on one 5MB sample yielded 7.988
+bits of entropy.</p>
+
+<p><img src="https://github.com/zdavkeos/whirlyfly/blob/master/doc/papillio_hard_at_work.png" alt="Papillio hard at work"></p>
+
+<h2>Future work</h2>
+
+<ul>
+<li>Do a few more entropy tests (NIST, FIPS, etc.)</li>
+<li>Fix it so there is only fresh data in the uart fifo</li>
+<li>Add more documentation on the inner-workings</li>
+<li>Test and tweak the output rate for optimal performance</li>
+<li>Add a pre-made bitfile for really impatient users</li>
+<li>Integrate the rng into the
+<a href="http://www.alvie.com/zpuino/index.html">Zpuino</a> core as a
+hardware extension</li>
+<li>Play with the RNG core, test other inverter configurations, etc.</li>
+<li>Do some Monte-Carlo simulations</li>
+</ul>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/zdavkeos">zdavkeos</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
