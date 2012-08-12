@@ -3,7 +3,7 @@
 body {
   padding:50px;
   font:14px/1.5 Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
-  color:#777;
+  color:#111;
   font-weight:300;
 }
 
@@ -92,7 +92,7 @@ th {
 }
 
 img {
-  max-width:100%;
+  max-width:80%;
 }
 
 header {
