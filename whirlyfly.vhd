@@ -106,20 +106,18 @@ begin
 
 -- create a clock that determines the sample
 -- rate of the generator
-  sample_clk_proc: process(clk)
+  sample_clk_proc : process(clk)
   begin
-	if( clk'EVENT and clk = '1' ) then
-      if( sample_clk_cnt > 510 ) then
-			data_present <= '1';
-		elsif( sample_clk_cnt = 512 ) then
-			sample_clk_cnt <= 0;
-		else
-			sample_clk_cnt <= sample_clk_cnt + 1;
-			data_present <= '0';
+    if rising_edge(clk) then
+      if( sample_clk_cnt = 512 ) then
+            sample_clk_cnt <= 0;
+            data_present <= '1';
+        else
+            sample_clk_cnt <= sample_clk_cnt + 1;
+            data_present <= '0';
       end if;
-		
-	end if;
-  end process sample_clk_proc;
-
+    end if;
+    end process sample_clk_proc;
+  
 end Behavioral;
 

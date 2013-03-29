@@ -10,7 +10,7 @@ uart_tx.vhd
 ## Xilinx ISE project files
 # intermediate build files
 *.bgn
-*.bit
+#*.bit
 *.bld
 *.cmd_log
 *.drc
