@@ -2,7 +2,7 @@
 
 A hardware random number generator (RNG) for the
 [Papilio One](www.papilio.cc) board based on the
-[Whirlygig](http://warmcat.com/_wp/whirlygig-rng/).
+[Whirlygig](https://warmcat.com/2007/11/24/whirlygig-gpl'd-hwrng.html).
 
 ![GtkTerm does not like chaos](https://github.com/zdavkeos/whirlyfly/blob/master/doc/gtkterm_sample.png)
 
